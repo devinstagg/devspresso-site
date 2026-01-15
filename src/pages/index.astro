@@ -1,0 +1,184 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allMixes = await getCollection('mixes');
+const sortedMixes = allMixes.sort((a, b) =>
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+const latestMixes = sortedMixes.slice(0, 3);
+---
+
+<BaseLayout title="Devspresso | NYC DJ">
+  <!-- Hero Section -->
+  <section class="relative min-h-[80vh] flex items-center">
+    <!-- Ambient warm glow -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-900/20 rounded-full blur-[120px]"></div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-6 py-20 text-center relative z-10">
+      <div class="mb-10">
+        <img
+          src="/images/devin stagg with all 3 dogs laser.jpg"
+          alt="Devspresso"
+          class="w-40 h-40 rounded-full mx-auto object-cover border-2 border-amber-700/50 shadow-2xl shadow-amber-900/30"
+        />
+      </div>
+
+      <p class="text-amber-600 text-sm font-medium tracking-[0.3em] uppercase mb-4">NYC-Based DJ</p>
+
+      <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
+        <span class="espresso-text">devspresso</span>
+      </h1>
+
+      <p class="text-xl text-neutral-400 mb-4 max-w-xl mx-auto font-light leading-relaxed">
+        Espresso for your ears.
+      </p>
+
+      <p class="text-neutral-500 mb-10 max-w-lg mx-auto">
+        House grooves, crowd favorites, throwbacks, and deep cuts. Music that moves you.
+      </p>
+
+      <div class="flex gap-4 justify-center flex-wrap">
+        <a
+          href="/contact"
+          class="bg-gradient-to-r from-amber-700 to-amber-600 text-white px-8 py-4 rounded font-medium tracking-wide hover:from-amber-600 hover:to-amber-500 transition-all shadow-lg shadow-amber-900/30"
+        >
+          Book for Your Event
+        </a>
+        <a
+          href="/mixes"
+          class="border border-neutral-700 text-neutral-300 px-8 py-4 rounded font-medium tracking-wide hover:border-amber-700 hover:text-amber-500 transition-all"
+        >
+          Listen to Mixes
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Divider -->
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="h-px bg-gradient-to-r from-transparent via-neutral-800 to-transparent"></div>
+  </div>
+
+  <!-- Testimonial -->
+  <section class="max-w-3xl mx-auto px-6 py-20 text-center">
+    <div class="relative">
+      <svg class="w-12 h-12 mx-auto mb-6 text-amber-700/30" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+      </svg>
+      <blockquote class="text-xl md:text-2xl text-neutral-200 font-light leading-relaxed mb-6">
+        "Devspresso was great for our company holiday party! Music was fun, well-timed, and kept the energy up! He was easy to work with, took requests, and did a nice job reading the room. Everyone had a great time — would definitely recommend for your next event!"
+      </blockquote>
+      <cite class="not-italic">
+        <span class="text-amber-500 font-medium">Rachel Johns</span>
+        <span class="text-neutral-500 block text-sm mt-1">Sunwater Capital's Party Planning Committee</span>
+      </cite>
+    </div>
+  </section>
+
+  <!-- Divider -->
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="h-px bg-gradient-to-r from-transparent via-neutral-800 to-transparent"></div>
+  </div>
+
+  <!-- Email Signup -->
+  <section class="max-w-xl mx-auto px-6 pt-12 pb-4 text-center">
+    <p class="text-neutral-400 mb-2 text-sm tracking-wide">
+      New mixes, upcoming gigs, and occasional espresso thoughts.
+    </p>
+    <div class="newsletter-container">
+      <iframe
+        src="https://subscribe-forms.beehiiv.com/cff63cd0-5469-4667-ad2a-2bc6d8403f7b"
+        class="beehiiv-embed"
+        data-test-id="beehiiv-embed"
+        frameborder="0"
+        scrolling="no"
+      ></iframe>
+    </div>
+  </section>
+  <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
+
+  <!-- Latest Mixes -->
+  <section class="max-w-6xl mx-auto px-6 py-20">
+    <div class="flex items-center justify-between mb-12">
+      <div>
+        <p class="text-amber-600 text-sm font-medium tracking-[0.2em] uppercase mb-2">Fresh Brews</p>
+        <h2 class="text-3xl font-bold text-neutral-100">Latest Mixes</h2>
+      </div>
+      <a href="/mixes" class="text-neutral-500 hover:text-amber-500 transition-colors text-sm font-medium">
+        View All →
+      </a>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      {latestMixes.map((mix) => (
+        <a
+          href={`/mixes/${mix.slug}`}
+          class="group block bg-neutral-900/50 rounded-lg overflow-hidden border border-neutral-800/50 hover:border-amber-800/50 transition-all duration-300"
+        >
+          <div class="aspect-square overflow-hidden relative">
+            <img
+              src={mix.data.coverImage}
+              alt={mix.data.title}
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-neutral-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <span class="inline-flex items-center gap-2 text-white text-sm font-medium">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+                Play
+              </span>
+            </div>
+          </div>
+          <div class="p-5">
+            <time class="text-xs text-neutral-500 font-medium tracking-wide uppercase">
+              {new Date(mix.data.date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+              })}
+            </time>
+            <h3 class="text-lg font-semibold mt-2 text-neutral-100 group-hover:text-amber-500 transition-colors">
+              {mix.data.title}
+            </h3>
+            {mix.data.genre && (
+              <span class="inline-block text-xs text-amber-600 mt-2 font-medium">
+                {mix.data.genre}
+              </span>
+            )}
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .espresso-text {
+    background: linear-gradient(135deg, #d4a574 0%, #8b6914 50%, #d4a574 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .newsletter-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    overflow: hidden;
+    max-height: 95px;
+  }
+  .newsletter-container iframe {
+    width: 100%;
+    max-width: 560px;
+    height: 150px;
+    border: none;
+    background-color: transparent;
+    margin-top: -40px;
+    margin-bottom: -18px;
+  }
+</style>

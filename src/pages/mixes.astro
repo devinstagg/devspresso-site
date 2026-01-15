@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allMixes = await getCollection('mixes');
+const sortedMixes = allMixes.sort((a, b) =>
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+---
+
+<BaseLayout title="Mixes | Devspresso">
+  <section class="max-w-6xl mx-auto px-6 py-20">
+    <div class="mb-16">
+      <p class="text-amber-600 text-sm font-medium tracking-[0.3em] uppercase mb-4">The Collection</p>
+      <h1 class="text-4xl md:text-5xl font-bold text-neutral-100">All Mixes</h1>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      {sortedMixes.map((mix) => (
+        <a
+          href={`/mixes/${mix.slug}`}
+          class="group block bg-neutral-900/50 rounded-lg overflow-hidden border border-neutral-800/50 hover:border-amber-800/50 transition-all duration-300"
+        >
+          <div class="aspect-square overflow-hidden relative">
+            <img
+              src={mix.data.coverImage}
+              alt={mix.data.title}
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-neutral-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <span class="inline-flex items-center gap-2 text-white text-sm font-medium">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+                Play
+              </span>
+            </div>
+          </div>
+          <div class="p-5">
+            <time class="text-xs text-neutral-500 font-medium tracking-wide uppercase">
+              {new Date(mix.data.date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+              })}
+            </time>
+            <h3 class="text-lg font-semibold mt-2 text-neutral-100 group-hover:text-amber-500 transition-colors">
+              {mix.data.title}
+            </h3>
+            {mix.data.genre && (
+              <span class="inline-block text-xs text-amber-600 mt-2 font-medium">
+                {mix.data.genre}
+              </span>
+            )}
+            <p class="text-neutral-500 mt-2 text-sm line-clamp-2">
+              {mix.data.description}
+            </p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

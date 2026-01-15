@@ -1,0 +1,234 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "NYC-based DJ bringing the perfect blend of house, hits, and good vibes to your event." } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      * {
+        font-family: 'Inter', sans-serif;
+      }
+
+      /* Subtle grain texture overlay */
+      .grain-overlay {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.03;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        z-index: 100;
+      }
+
+      /* Espresso gradient text */
+      .espresso-text {
+        background: linear-gradient(135deg, #d4a574 0%, #8b6914 50%, #d4a574 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* Steam/Equalizer animation */
+      @keyframes steam-rise {
+        0% {
+          transform: translateY(0) scaleY(0.8);
+          opacity: 0;
+        }
+        20% {
+          opacity: 0.6;
+        }
+        80% {
+          opacity: 0.3;
+        }
+        100% {
+          transform: translateY(-60px) scaleY(1.2);
+          opacity: 0;
+        }
+      }
+
+      @keyframes eq-bar {
+        0%, 100% {
+          transform: scaleY(0.3);
+        }
+        50% {
+          transform: scaleY(1);
+        }
+      }
+
+      @keyframes pot-glow {
+        0%, 100% {
+          filter: drop-shadow(0 0 8px rgba(180, 120, 60, 0.2));
+        }
+        50% {
+          filter: drop-shadow(0 0 20px rgba(180, 120, 60, 0.4));
+        }
+      }
+
+      .steam-bar {
+        animation: steam-rise 4s ease-out infinite;
+        transform-origin: bottom;
+      }
+      .steam-bar:nth-child(1) { animation-delay: 0s; }
+      .steam-bar:nth-child(2) { animation-delay: 0.6s; }
+      .steam-bar:nth-child(3) { animation-delay: 1.2s; }
+      .steam-bar:nth-child(4) { animation-delay: 0.3s; }
+      .steam-bar:nth-child(5) { animation-delay: 0.9s; }
+
+      .eq-bar {
+        animation: eq-bar 1.2s ease-in-out infinite;
+        transform-origin: bottom;
+      }
+      .eq-bar:nth-child(1) { animation-delay: 0s; }
+      .eq-bar:nth-child(2) { animation-delay: 0.15s; }
+      .eq-bar:nth-child(3) { animation-delay: 0.3s; }
+      .eq-bar:nth-child(4) { animation-delay: 0.45s; }
+      .eq-bar:nth-child(5) { animation-delay: 0.6s; }
+
+      .moka-pot {
+        animation: pot-glow 4s ease-in-out infinite;
+      }
+
+      @keyframes wave-drip {
+        0% {
+          stroke-dashoffset: 200;
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 0.8;
+        }
+        100% {
+          stroke-dashoffset: 0;
+          opacity: 0;
+        }
+      }
+
+      .wave-drip {
+        stroke-dasharray: 200;
+        stroke-dashoffset: 200;
+        animation: wave-drip 4s ease-in-out infinite;
+      }
+      .wave-drip:nth-child(1) { animation-delay: 0s; }
+      .wave-drip:nth-child(2) { animation-delay: 0.8s; }
+      .wave-drip:nth-child(3) { animation-delay: 1.6s; }
+      .wave-drip:nth-child(4) { animation-delay: 2.4s; }
+    </style>
+  </head>
+  <body class="bg-neutral-950 text-neutral-100 min-h-screen flex flex-col">
+    <!-- Subtle grain texture -->
+    <div class="grain-overlay"></div>
+
+    <!-- Ambient background glow -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden">
+      <div class="absolute top-0 left-1/4 w-96 h-96 bg-amber-900/10 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 right-1/4 w-80 h-80 bg-orange-900/10 rounded-full blur-3xl"></div>
+    </div>
+
+    <!-- Animated Bialetti Pouring Waveforms - Bottom Right -->
+    <div class="fixed bottom-4 right-4 md:bottom-10 md:right-10 pointer-events-none opacity-[0.08]">
+      <svg width="220" height="160" viewBox="0 0 220 160" class="moka-pot w-36 h-28 md:w-[220px] md:h-[160px]">
+        <!-- Bialetti pot tilted to pour -->
+        <g transform="translate(0, 30) rotate(-50, 70, 70)">
+          <!-- Bottom chamber - octagonal Bialetti shape -->
+          <path d="M40 65 L40 115 Q40 128 52 128 L88 128 Q100 128 100 115 L100 65"
+                fill="none" stroke="#b4783c" stroke-width="2.5"/>
+
+          <!-- Middle section / filter -->
+          <rect x="37" y="55" width="66" height="12" rx="2" fill="none" stroke="#b4783c" stroke-width="2.5"/>
+
+          <!-- Top chamber -->
+          <path d="M42 55 L42 38 Q42 28 52 28 L88 28 Q98 28 98 38 L98 55"
+                fill="none" stroke="#b4783c" stroke-width="2.5"/>
+
+          <!-- Spout - prominent pouring spout -->
+          <path d="M42 38 L28 28 L22 32" fill="none" stroke="#b4783c" stroke-width="3" stroke-linecap="round"/>
+
+          <!-- Lid -->
+          <path d="M55 28 L55 22 Q70 14 85 22 L85 28"
+                fill="none" stroke="#b4783c" stroke-width="2"/>
+          <!-- Knob -->
+          <circle cx="70" cy="16" r="5" fill="none" stroke="#b4783c" stroke-width="2"/>
+
+          <!-- Handle -->
+          <path d="M100 70 Q120 70 120 92 Q120 114 100 114"
+                fill="none" stroke="#b4783c" stroke-width="2.5"/>
+        </g>
+
+        <!-- Waveforms dripping/pouring from spout -->
+        <g class="waveform-pour">
+          <!-- Wave 1 - flows from spout tip -->
+          <path class="wave-drip" d="M18 58 Q35 52 55 60 Q75 68 95 62 Q115 56 135 64 Q155 72 175 66 Q195 60 215 68"
+                stroke="#b4783c" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <!-- Wave 2 -->
+          <path class="wave-drip" d="M20 72 Q38 64 58 72 Q78 80 98 74 Q118 68 138 76 Q158 84 178 78 Q198 72 215 80"
+                stroke="#b4783c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- Wave 3 -->
+          <path class="wave-drip" d="M22 86 Q40 78 60 86 Q80 94 100 88 Q120 82 140 90 Q160 98 180 92"
+                stroke="#b4783c" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- Wave 4 -->
+          <path class="wave-drip" d="M24 100 Q42 92 62 100 Q82 108 102 102 Q122 96 142 104 Q162 112 182 106"
+                stroke="#b4783c" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Header -->
+    <header class="border-b border-neutral-800/50 bg-neutral-950/80 backdrop-blur-xl sticky top-0 z-50">
+      <nav class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
+        <a href="/" class="text-2xl font-semibold tracking-tight hover:opacity-80 transition-opacity">
+          <span class="espresso-text">devspresso</span>
+        </a>
+        <div class="flex items-center gap-8">
+          <a href="/" class="text-neutral-400 hover:text-neutral-100 transition-colors text-sm font-medium tracking-wide uppercase">Home</a>
+          <a href="/mixes" class="text-neutral-400 hover:text-neutral-100 transition-colors text-sm font-medium tracking-wide uppercase">Mixes</a>
+          <a href="/contact" class="bg-gradient-to-r from-amber-700 to-amber-600 text-white px-5 py-2.5 rounded text-sm font-medium tracking-wide uppercase hover:from-amber-600 hover:to-amber-500 transition-all">Book</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-grow relative z-10">
+      <slot />
+    </main>
+
+    <footer class="border-t border-neutral-800/50 mt-24 relative z-10">
+      <div class="max-w-6xl mx-auto px-6 py-12">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+          <div>
+            <span class="espresso-text text-xl font-semibold">devspresso</span>
+            <p class="text-neutral-500 text-sm mt-1">Espresso for your ears.</p>
+          </div>
+          <div class="flex items-center gap-6">
+            <a href="https://soundcloud.com/djdevspresso" target="_blank" rel="noopener" class="text-neutral-500 hover:text-amber-500 transition-colors">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M1.175 12.225c-.051 0-.094.046-.101.1l-.233 2.154.233 2.105c.007.058.05.098.101.098.05 0 .09-.04.099-.098l.255-2.105-.27-2.154c-.009-.06-.049-.1-.084-.1zm-.899 1.727c-.048 0-.09.037-.093.085l-.185 1.452.185 1.404c.003.048.045.085.093.085.05 0 .088-.037.095-.085l.215-1.404-.215-1.452c-.007-.048-.045-.085-.095-.085zm1.803-2.108c-.057 0-.1.05-.106.112l-.211 2.641.211 2.524c.006.062.049.112.106.112.055 0 .1-.05.108-.112l.233-2.524-.233-2.641c-.008-.062-.053-.112-.108-.112zm.899-.387c-.063 0-.111.055-.119.124l-.193 3.028.193 2.895c.008.069.056.124.119.124.061 0 .11-.055.116-.124l.218-2.895-.218-3.028c-.006-.069-.055-.124-.116-.124zm.905-.299c-.07 0-.123.062-.129.136l-.178 3.327.178 3.092c.006.074.059.136.129.136.069 0 .121-.062.127-.136l.2-3.092-.2-3.327c-.006-.074-.058-.136-.127-.136zm.899-.147c-.076 0-.133.068-.139.149l-.163 3.474.163 3.218c.006.081.063.149.139.149.076 0 .132-.068.138-.149l.185-3.218-.185-3.474c-.006-.081-.062-.149-.138-.149zm.908-.076c-.082 0-.143.074-.148.161l-.148 3.55.148 3.34c.005.087.066.161.148.161.082 0 .142-.074.147-.161l.168-3.34-.168-3.55c-.005-.087-.065-.161-.147-.161zm.899.052c-.088 0-.153.08-.157.173l-.133 3.498.133 3.461c.004.093.069.173.157.173.087 0 .152-.08.156-.173l.15-3.461-.15-3.498c-.004-.093-.069-.173-.156-.173zm.908-.141c-.094 0-.163.087-.167.186l-.118 3.639.118 3.584c.004.099.073.186.167.186.094 0 .162-.087.165-.186l.133-3.584-.133-3.639c-.003-.099-.071-.186-.165-.186zm.899.157c-.1 0-.172.093-.175.198l-.103 3.482.103 3.707c.003.105.075.198.175.198.1 0 .171-.093.173-.198l.118-3.707-.118-3.482c-.002-.105-.073-.198-.173-.198zm.916-.259c-.107 0-.181.099-.183.21l-.088 3.741.088 3.83c.002.111.076.21.183.21.107 0 .18-.099.181-.21l.1-3.83-.1-3.741c-.001-.111-.074-.21-.181-.21zm.899.353c-.112 0-.19.105-.191.223l-.073 3.388.073 3.952c.001.118.079.223.191.223.112 0 .189-.105.19-.223l.083-3.952-.083-3.388c-.001-.118-.078-.223-.19-.223zm.924-.447c-.118 0-.199.112-.199.236l-.058 3.835.058 4.075c0 .124.081.236.199.236.118 0 .198-.112.198-.236l.065-4.075-.065-3.835c0-.124-.08-.236-.198-.236zm.899.596c-.124 0-.207.118-.207.248l-.043 3.239.043 4.196c0 .13.083.248.207.248.125 0 .207-.118.207-.248l.048-4.196-.048-3.239c0-.13-.082-.248-.207-.248zm.924-.725c-.13 0-.214.124-.214.26l-.028 3.964.028 4.319c0 .136.084.26.214.26.131 0 .213-.124.213-.26l.031-4.319-.031-3.964c0-.136-.082-.26-.213-.26zm.899.883c-.136 0-.22.13-.22.272l-.013 3.081.013 4.44c0 .142.084.272.22.272.137 0 .22-.13.219-.272l.015-4.44-.015-3.081c.001-.142-.082-.272-.219-.272zm.924-.988c-.143 0-.226.136-.226.285v3.069l.007 4.561c0 .149.083.285.219.285.137 0 .226-.136.225-.285l.001-4.561-.008-3.069c0-.149-.082-.285-.218-.285zm2.738 1.089c-.453 0-.889.083-1.293.23-.266-3.022-2.816-5.395-5.919-5.395-.786 0-1.536.156-2.222.432-.256.103-.324.209-.326.416v10.611c.003.217.169.399.385.413h9.375c1.777 0 3.219-1.453 3.219-3.243s-1.442-3.464-3.219-3.464z"/></svg>
+            </a>
+            <a href="https://instagram.com/djdevspresso" target="_blank" rel="noopener" class="text-neutral-500 hover:text-amber-500 transition-colors">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+            </a>
+            <a href="https://youtube.com/@djdevspresso" target="_blank" rel="noopener" class="text-neutral-500 hover:text-amber-500 transition-colors">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="border-t border-neutral-800/50 mt-8 pt-8 text-center">
+          <p class="text-neutral-600 text-sm">&copy; {new Date().getFullYear()} Devspresso. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

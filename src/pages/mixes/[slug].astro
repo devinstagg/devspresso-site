@@ -1,0 +1,177 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const mixEntries = await getCollection('mixes');
+  return mixEntries.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const mix = entry.data;
+---
+
+<BaseLayout title={`${mix.title} | Devspresso`} description={mix.description}>
+  <article class="max-w-4xl mx-auto px-6 py-12">
+    <!-- Mix Header -->
+    <div class="text-center mb-8">
+      <time class="text-amber-600 text-sm font-medium tracking-wide uppercase">
+        {new Date(mix.date).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        })}
+      </time>
+      <h1 class="text-3xl md:text-4xl font-bold mt-3 mb-4 text-neutral-100">{mix.title}</h1>
+      <div class="flex items-center justify-center gap-4">
+        {mix.genre && (
+          <span class="text-amber-500 text-sm font-medium">
+            {mix.genre}
+          </span>
+        )}
+        {mix.duration && (
+          <span class="text-neutral-500 text-sm">
+            {mix.duration}
+          </span>
+        )}
+      </div>
+    </div>
+
+    <!-- SoundCloud Player - Large Visual Mode -->
+    {mix.platform === 'soundcloud' && (
+      <div class="mb-10">
+        <iframe
+          width="100%"
+          height="400"
+          scrolling="no"
+          frameborder="no"
+          allow="autoplay"
+          src={`${mix.embedUrl}&color=%23b4783c&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true`}
+          class="rounded-lg"
+        ></iframe>
+      </div>
+    )}
+
+    <!-- YouTube Player -->
+    {mix.platform === 'youtube' && (
+      <div class="mb-10 aspect-video">
+        <iframe
+          width="100%"
+          height="100%"
+          src={mix.embedUrl}
+          title={mix.title}
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          class="rounded-lg"
+        ></iframe>
+      </div>
+    )}
+
+    <!-- Description -->
+    <div class="prose prose-invert prose-amber max-w-none mb-10">
+      <Content />
+    </div>
+
+    <!-- Tracklist (if provided) -->
+    {mix.tracklist && mix.tracklist.length > 0 && (
+      <div class="bg-neutral-900/50 border border-neutral-800 rounded-lg p-6 mb-10">
+        <h2 class="text-xl font-bold mb-6 text-neutral-100">Tracklist</h2>
+        <ol class="space-y-3">
+          {mix.tracklist.map((track, index) => (
+            <li class="flex items-start gap-4 text-neutral-400 border-b border-neutral-800/50 pb-3 last:border-0">
+              <span class="text-amber-600 font-mono text-sm w-6">{String(index + 1).padStart(2, '0')}</span>
+              <span>{track}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    )}
+
+    <!-- Affiliate Links -->
+    <div class="mb-10">
+      <p class="text-neutral-500 text-sm mb-3">Links, if you're interested.</p>
+      <ul class="space-y-2 text-sm">
+        <li>
+          <a href="https://amzn.to/4d7V5WM" target="_blank" rel="noopener noreferrer" class="text-amber-500 hover:text-amber-400 transition-colors">
+            Pioneer DDJ FLX-4
+          </a>
+        </li>
+        <li>
+          <a href="https://amzn.to/3WGXGBP" target="_blank" rel="noopener noreferrer" class="text-amber-500 hover:text-amber-400 transition-colors">
+            Audio-Technica ATH-M50X Headphones
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Back Link -->
+    <div class="text-center mb-16">
+      <a
+        href="/mixes"
+        class="inline-flex items-center gap-2 text-neutral-500 hover:text-amber-500 transition-colors font-medium"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        Back to Mixes
+      </a>
+    </div>
+
+    <!-- Newsletter Signup -->
+    <div class="border-t border-neutral-800 pt-8">
+      <div class="text-center max-w-md mx-auto">
+        <p class="text-amber-600 text-sm font-medium tracking-[0.2em] uppercase mb-2">Stay in the loop</p>
+        <h3 class="text-2xl font-bold text-neutral-100 mb-2">Want more mixes?</h3>
+        <p class="text-neutral-400 mb-2 text-sm">
+          Get notified when new mixes drop, plus upcoming gigs and occasional espresso thoughts.
+        </p>
+      </div>
+      <div class="newsletter-container">
+        <iframe
+          src="https://subscribe-forms.beehiiv.com/cff63cd0-5469-4667-ad2a-2bc6d8403f7b"
+          class="beehiiv-embed"
+          data-test-id="beehiiv-embed"
+          frameborder="0"
+          scrolling="no"
+        ></iframe>
+      </div>
+    </div>
+  </article>
+  <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
+</BaseLayout>
+
+<style>
+  .newsletter-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    overflow: hidden;
+    max-height: 95px;
+  }
+  .newsletter-container iframe {
+    width: 100%;
+    max-width: 560px;
+    height: 150px;
+    border: none;
+    background-color: transparent;
+    margin-top: -40px;
+    margin-bottom: -18px;
+  }
+</style>
+
+<style is:global>
+  .prose h2 {
+    @apply text-xl font-bold mt-8 mb-4 text-neutral-100;
+  }
+  .prose p {
+    @apply text-neutral-400 leading-relaxed mb-4;
+  }
+  .prose a {
+    @apply text-amber-500 hover:text-amber-400 transition-colors;
+  }
+</style>
